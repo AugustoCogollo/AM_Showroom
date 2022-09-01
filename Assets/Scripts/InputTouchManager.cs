@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class InputTouchManager : MonoBehaviour
 {
-    Touch[] fingers = Input.touches;
     void Update()
     {
-        CheckForFingers(fingers);
+        CheckForFingers(Input.touches);
     }
 
     private void LateUpdate()
     {
-        CheckIfSystemCancelledTrackingFinger(fingers);
+        CheckIfSystemCancelledTrackingFinger(Input.touches);
     }
 
     public void CheckForFingers(Touch[] touches)
