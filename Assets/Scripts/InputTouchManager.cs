@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class InputTouchManager : MonoBehaviour
 {
+    CubeMover cubeMover;
+
+    private void Start()
+    {
+        cubeMover = GetComponent<CubeMover>();
+    }
+
     void Update()
     {
         CheckForFingers(Input.touches);
+        CheckAmountOfFingersTouchingTheScreen(Input.touches);
     }
 
     private void LateUpdate()
@@ -25,6 +33,14 @@ public class InputTouchManager : MonoBehaviour
         }
     }
 
+    private void CheckAmountOfFingersTouchingTheScreen(Touch[] touches)
+    {
+        if (Input.touchCount == 0)
+            Debug.Log("No fingers are touching the screen");
+        else
+            Debug.Log(Input.touchCount + " fingers are touching the screen");
+    }
+
     private void CheckForFingersTouchingScreen(Touch touch)
     {
         if (touch.phase == TouchPhase.Began)
@@ -34,7 +50,11 @@ public class InputTouchManager : MonoBehaviour
     private void CheckForFingersMoving(Touch touch)
     {
         if (touch.phase == TouchPhase.Moved)
+        {
             PrintFingerActivity(touch, " is moving");
+            cubeMover.MoveCubeTowardsPosition(touch.position);
+        }
+            
     }
 
     private void CheckForStationaryFingers(Touch touch)
@@ -50,7 +70,7 @@ public class InputTouchManager : MonoBehaviour
     }
     private void PrintFingerActivity(Touch touch, string log)
     {
-        Debug.Log(touch + log);
+        Debug.Log(touch.fingerId + log);
     }
 
     private void CheckIfSystemCancelledTrackingFinger(Touch[] touches)
