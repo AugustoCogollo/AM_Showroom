@@ -11,14 +11,12 @@ public class Acelerometer1 : MonoBehaviour
     private string input = "teasting";
     Rigidbody rb;
 
-    public float fuerzaGravedad = 9.81f;
-
-    public bool isGrounded;
+    //public float fuerzaGravedad = 9.81f;
+    //public bool isGrounded;
 
     private void Start()
     {
         speed = 2;
-        fuerzaSalto = 50f;
 
         rb = this.gameObject.GetComponent<Rigidbody>();
 
@@ -34,20 +32,6 @@ public class Acelerometer1 : MonoBehaviour
         //rb.AddForce(dir);
 
         Debug.DrawRay(transform.position + Vector3.up, dirVelocity, Color.blue);
-
-        if (!isGrounded)
-        {
-            rb.AddForce(new Vector3(0, fuerzaGravedad, 0));
-        }
-
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if(collision.gameObject.tag == "Ground")
-        {
-            isGrounded = true;
-        }
     }
 
     private void HorizontalPhone()
@@ -62,19 +46,12 @@ public class Acelerometer1 : MonoBehaviour
 
     private void Jump()
     {
-        if (isGrounded)
+        dirVelocity = Input.acceleration;
+        if (dirVelocity.sqrMagnitude >= 5f)
         {
-            dirVelocity = Input.acceleration;
-            if (dirVelocity.sqrMagnitude >= 5f)
-            {
-                rb.AddForce(new Vector3(0, fuerzaSalto, 0), ForceMode.Force);
-                this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-                isGrounded = false;
-            }
-            
-
+            rb.AddForce(new Vector3(0, fuerzaSalto, 0), ForceMode.Impulse);
+            this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            input = "Salta";
         }
-
     }
-
 }

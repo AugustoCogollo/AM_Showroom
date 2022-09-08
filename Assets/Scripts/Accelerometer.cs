@@ -32,7 +32,6 @@ public class Accelerometer : MonoBehaviour
         MoveObjectWithVelocity();
         CheckForPhoneMovementY();
         Debug.DrawRay(transform.position + Vector3.up, tiltSpeed, Color.cyan);
-
         Debug.Log("Velocity.y: " + rb.velocity.y.ToString());
 
         if (!isGrounded)
