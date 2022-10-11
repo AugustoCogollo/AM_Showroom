@@ -20,7 +20,7 @@ public class Vehicle : MonoBehaviour
     [Header("Animations Curves")]
     public AnimationCurve accelerationCurve;
     public AnimationCurve brakingCurve;
-
+    public AnimationCurve rotationCurve;
 
 
     [Header("Ship constraints")]
@@ -36,29 +36,52 @@ public class Vehicle : MonoBehaviour
     public float timeForMaxAcceleration = 10f;
     public float currentTime;
 
+    
+
     void Update()
     {
         accelerometerInput = Input.acceleration;
         accelerometerInput.Normalize();
 
+        currentTime = Mathf.Clamp(currentTime, 0.0f, timeForMaxAcceleration);
         currentTime += Time.deltaTime;
 
-        while (currentTime < timeForMaxAcceleration)
-        {
-            accelerationCurve.Evaluate(currentTime);
-        }
+        motorForceToApply = Mathf.Clamp(motorForceToApply, maxBrakeForce, maxMotorForce);
 
         if(accelerometerInput.y > 0)
         {
-            motorForceToApply = accelerometerInput.y * maxMotorForce;
+            motorForceToApply = accelerationCurve.Evaluate(currentTime) * accelerometerInput.y * maxMotorForce;
+            Debug.Log(accelerationCurve.Evaluate(currentTime));
         }
+
         else
         {
-            motorForceToApply = accelerometerInput.y * maxBrakeForce;
+            motorForceToApply = accelerationCurve.Evaluate(currentTime) * accelerometerInput.y * maxBrakeForce;
             brakeForceToApply = 0;
         }
 
-        currentSteeringAngle = accelerometerInput.x * maxSteerAngle;
+        if(Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
+            {
+                //Right touch
+                if (touch.position.x > Screen.width / 2)
+                {
+                    currentSteeringAngle = maxSteerAngle;
+
+                }
+
+                //Left touch
+                else if (touch.position.x < Screen.width / 2)
+                {
+                    currentSteeringAngle = -maxSteerAngle;
+                }
+            }
+
+            else
+                currentSteeringAngle = 0;
+        }
 
         for(int i = 0; i < wheelsShip.Length; ++i)
         {
