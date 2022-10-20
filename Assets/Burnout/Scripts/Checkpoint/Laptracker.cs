@@ -48,11 +48,12 @@ public class Laptracker : MonoBehaviour
 
     private void Update()
     {
-        bestLapTxt.text = bestLapTime.ToString() + " : " + (bestLapTime % 60).ToString();
+        bestLapTxt.text = (Mathf.Floor(bestLapTime / 60)).ToString("00") + " : " + (bestLapTime % 60).ToString("00");
         totalTime += Time.deltaTime;
-        totalTimeTxt.text = totalTime.ToString() + " : " + (totalTime % 60).ToString();
-
         currentLapTime += Time.deltaTime;
+        
+        totalTimeTxt.text = (Mathf.Floor(totalTime/60)).ToString("00") + " : " + (totalTime % 60).ToString("00");
+
 
         var nearestCheckpoint = NearestCheckpoint();
 

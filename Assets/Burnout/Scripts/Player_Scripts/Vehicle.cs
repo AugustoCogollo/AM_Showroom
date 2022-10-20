@@ -55,7 +55,7 @@ public class Vehicle : MonoBehaviour
         accelerometerInput = Input.acceleration;
         accelerometerInput.Normalize();
 
-        kmPerHour = rbVehicle.velocity.z / 1000 * 60 * 60;
+        kmPerHour = Mathf.Round(rbVehicle.velocity.magnitude * 3.6f);
         velocityTxt.text = kmPerHour.ToString() + "km/h";
 
 
