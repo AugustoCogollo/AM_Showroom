@@ -13,6 +13,15 @@ public class Laptracker : MonoBehaviour
 
     int lapsComplete = 0;
 
+    [Header("Time Values")]
+    public float totalTime;
+    public float currentLapTime;
+    public float bestLapTime;
+
+    [Header("UI Values")]
+    public TMP_Text totalTimeTxt;
+    public TMP_Text bestLapTxt;
+
     Checkpoint lastSeenCheckpoint;
     Checkpoint[] allCheckpoints;
     Checkpoint StartCheckpoint { 
@@ -33,10 +42,18 @@ public class Laptracker : MonoBehaviour
         CreateCircuit();
 
         lastSeenCheckpoint = StartCheckpoint;
+
+        bestLapTime = 0;
     }
 
     private void Update()
     {
+        bestLapTxt.text = bestLapTime.ToString() + " : " + (bestLapTime % 60).ToString();
+        totalTime += Time.deltaTime;
+        totalTimeTxt.text = totalTime.ToString() + " : " + (totalTime % 60).ToString();
+
+        currentLapTime += Time.deltaTime;
+
         var nearestCheckpoint = NearestCheckpoint();
 
         if (nearestCheckpoint == null)
@@ -60,8 +77,8 @@ public class Laptracker : MonoBehaviour
             else
             {
                 lastSeenCheckpoint = nearestCheckpoint;
-
                 wrongWayIndicator.SetActive(false);
+
             }
 
         }
@@ -72,6 +89,11 @@ public class Laptracker : MonoBehaviour
             lapsComplete += 1;
             UpdateLapCounter();
 
+            if(currentLapTime > bestLapTime)
+            {
+                bestLapTime = currentLapTime;
+            }
+            currentLapTime = 0;
         }
         else
         {

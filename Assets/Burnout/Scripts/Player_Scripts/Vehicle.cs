@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 [System.Serializable]
 public class WheelShip
@@ -16,6 +17,7 @@ public class Vehicle : MonoBehaviour
 {
     [Header("Ship values")]
     [SerializeField] WheelShip[] wheelsShip;
+    Rigidbody rbVehicle;
 
     [Header("Animations Curves")]
     public AnimationCurve accelerationCurve;
@@ -35,13 +37,30 @@ public class Vehicle : MonoBehaviour
     [SerializeField] float currentSteeringAngle;
     public float timeForMaxAcceleration = 10f;
     public float currentTime;
+    public float kmPerHour;
 
-    
+    [Header("Position values")]
+    [SerializeField] int positionValue;
+
+    [Header("UI Values")]
+    public TMP_Text velocityTxt;
+
+    private void Start()
+    {
+        rbVehicle = GetComponent<Rigidbody>();
+    }
 
     void Update()
     {
         accelerometerInput = Input.acceleration;
         accelerometerInput.Normalize();
+
+        kmPerHour = rbVehicle.velocity.z / 1000 * 60 * 60;
+        velocityTxt.text = kmPerHour.ToString() + "km/h";
+
+
+
+        
 
         currentTime = Mathf.Clamp(currentTime, 0.0f, timeForMaxAcceleration);
         currentTime += Time.deltaTime;
@@ -99,12 +118,11 @@ public class Vehicle : MonoBehaviour
 
     }
 
-    private void OnGUI()
+    private void OnTriggerEnter(Collider other)
     {
-        GUI.skin.label.fontSize = Screen.width / 50;
-
-        GUILayout.Label("Accelerometer X: " + Input.acceleration.x);
-        GUILayout.Label("Accelerometer Y: " + Input.acceleration.y);
-        GUILayout.Label("Accelerometer Z: " + Input.acceleration.z);
+        if(other.gameObject.tag == "Checkpoint")
+        {
+            ++positionValue;
+        }
     }
 }

@@ -79,3 +79,4 @@ public class CheckpointEditor : Editor
     }
 }
 #endif
+
