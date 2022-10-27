@@ -31,27 +31,38 @@ public class Leaderboard : MonoBehaviour
         {
             SwapPlaces(vehicles[0], vehicles[1]);
         }
+        dot1To2 = Vector3.Dot(vehicles[0].transform.forward, (vehicles[0].transform.position - vehicles[1].transform.position).normalized);
         for(int i = 0; i < vehiclesAmount; ++i)
         {
-            dot1To2 = Vector3.Dot(vehicles[0].transform.forward, (vehicles[0].transform.position - vehicles[1].transform.position).normalized);
+            for(int j = 0; j < vehiclesAmount; ++j)
+            {
+                if (GetDistanceBetweenVehicles(vehicles[i], vehicles[j]) > 4f)
+                    return;
+                if (GetDotProductBetweenVehicles(vehicles[i], vehicles[j]) > 0.7f)
+                    return;
 
-        }
+                SwapPlaces(vehicles[i], vehicles[j]);
 
-        Debug.Log(players.Count);
-        if (dot1To2 > 0.7f)
-        {
-            Debug.Log("Player 1 is in front of Player 2: " + dot1To2);
-        }
-        else if (dot1To2 < -0.7)
-        {
-            Debug.Log("Player 1 is behind Player 2: " + dot1To2);
-            SwapPlaces(vehicles[0], vehicles[1]);
+            }
         }
 
-        else
-        {
-            Debug.Log("Player 1 is besides Player 2: " + dot1To2);
-        }
+        Debug.Log(GetDistanceBetweenVehicles(vehicles[0], vehicles[1]).ToString());
+
+        //Debug.Log(players.Count);
+        //if (dot1To2 > 0.7f)
+        //{
+        //    Debug.Log("Player 1 is in front of Player 2: " + dot1To2);
+        //}
+        //else if (dot1To2 < -0.7)
+        //{
+        //    Debug.Log("Player 1 is behind Player 2: " + dot1To2);
+        //    SwapPlaces(vehicles[0], vehicles[1]);
+        //}
+
+        //else
+        //{
+        //    Debug.Log("Player 1 is besides Player 2: " + dot1To2);
+        //}
     }
 
     private void OnGUI()
@@ -64,6 +75,15 @@ public class Leaderboard : MonoBehaviour
         }
     }
 
+    float GetDistanceBetweenVehicles(GameObject vehicle1, GameObject vehicle2)
+    {
+        return Vector3.Distance(vehicle1.transform.position, vehicle2.transform.position);
+    }
+
+    float GetDotProductBetweenVehicles(GameObject front, GameObject behind)
+    {
+        return Vector3.Dot(front.transform.forward, (front.transform.position - behind.transform.position).normalized);
+    }
 
     void SwapPlaces(GameObject front, GameObject behind)
     {
