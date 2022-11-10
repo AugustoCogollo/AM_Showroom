@@ -7,6 +7,7 @@ public class Path : MonoBehaviour
     public bool bDebug = true;
     public float radius = 2.0f;
     public Vector3[] pointA;
+    public Color pathColor = Color.red;
 
     public float GetLength()
     {
@@ -31,6 +32,7 @@ public class Path : MonoBehaviour
         }
     }
 
+    public 
     // Start is called before the first frame update
     void Start()
     {

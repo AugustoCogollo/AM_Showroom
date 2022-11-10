@@ -42,7 +42,6 @@ public class OrbitingCamera : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     private void LateUpdate()
     {
         accelerometerInput = Input.acceleration;
