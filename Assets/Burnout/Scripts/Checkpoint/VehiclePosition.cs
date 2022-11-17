@@ -5,17 +5,40 @@ using TMPro;
 
 public class VehiclePosition : MonoBehaviour
 {
-    TextMeshPro position;
     [SerializeField] Leaderboard leaderboard;
+    TextMeshPro position;
+    public int trackPoints = 0;
+    public List<GameObject> checkpoints;
 
     void Start()
     {
         position = GetComponent<TextMeshPro>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        position.text = leaderboard.players[this.gameObject].ToString();   
+        
+        position.text = leaderboard.GetVehiclePosition(this.gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.transform.tag == "Checkpoint")
+        {
+            if (checkpoints.Contains(other.gameObject))
+            {
+                return;
+            }
+            else
+            {
+                ++trackPoints;
+                checkpoints.Add(other.gameObject);
+            }
+        }
+    }
+
+    public void CleanAfterNewLap()
+    {
+        checkpoints.Clear();
     }
 }

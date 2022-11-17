@@ -10,6 +10,7 @@ public class Laptracker : MonoBehaviour
     [SerializeField] int longestPermittedShortcut = 2;
     [SerializeField] GameObject wrongWayIndicator;
     [SerializeField] TMP_Text lapCounter;
+    public List<VehiclePosition> vehicles;
 
     int lapsComplete = 0;
 
@@ -79,7 +80,6 @@ public class Laptracker : MonoBehaviour
             {
                 lastSeenCheckpoint = nearestCheckpoint;
                 wrongWayIndicator.SetActive(false);
-
             }
 
         }
@@ -89,6 +89,11 @@ public class Laptracker : MonoBehaviour
 
             lapsComplete += 1;
             UpdateLapCounter();
+
+            for(int i = 0; i < vehicles.Count; ++i)
+            {
+                vehicles[i].CleanAfterNewLap();
+            }
 
             if(currentLapTime > bestLapTime)
             {

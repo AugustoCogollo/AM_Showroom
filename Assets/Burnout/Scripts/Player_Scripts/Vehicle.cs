@@ -58,10 +58,6 @@ public class Vehicle : MonoBehaviour
         kmPerHour = Mathf.Round(rbVehicle.velocity.magnitude * 3.6f);
         velocityTxt.text = kmPerHour.ToString() + "km/h";
 
-
-
-        
-
         currentTime = Mathf.Clamp(currentTime, 0.0f, timeForMaxAcceleration);
         currentTime += Time.deltaTime;
 
