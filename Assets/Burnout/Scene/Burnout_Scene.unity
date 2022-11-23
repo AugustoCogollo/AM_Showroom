@@ -3821,7 +3821,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cafb683d0b3adf749b1f5b4dcf955c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicles: []
+  vehicles:
+  - {fileID: 1544537001}
+  - {fileID: 1341989829}
+  - {fileID: 1548731329}
+  - {fileID: 674722503}
 --- !u!4 &261069193
 Transform:
   m_ObjectHideFlags: 0
@@ -22799,6 +22803,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CinemachineVirtualCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 6691645748356329554, guid: 9d03ca75c68b96e4f8f5203e8976bfee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d03ca75c68b96e4f8f5203e8976bfee, type: 3}
 --- !u!1 &1781151903
@@ -27440,7 +27448,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2141575306
 MonoBehaviour:
   m_ObjectHideFlags: 0

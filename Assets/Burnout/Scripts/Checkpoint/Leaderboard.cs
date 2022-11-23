@@ -5,17 +5,18 @@ using TMPro;
 
 public class Leaderboard : MonoBehaviour
 {
-    public List<GameObject> vehicles;
-    public SortedList<int, GameObject> leaderboard;
+    public List<GameObject> vehicles = new List<GameObject>();
+    public Dictionary<GameObject, int> vehicleValues = new Dictionary<GameObject, int>();
+    public Dictionary<GameObject, int> leaderboard; //Sorted vehicleValues
     float lastUpdate; 
     float timeToUpdateLeaderboard = 2;
 
     void Start()
     {
         lastUpdate = Time.realtimeSinceStartup;
-        for(int i = 0; i < vehicles.Capacity; ++i)
+        for(int i = 0; i < vehicles.Count; ++i)
         {
-            leaderboard.Add(vehicles[i].GetComponent<VehiclePosition>().trackPoints, vehicles[i]);
+            vehicleValues.Add(vehicles[i], vehicles[i].GetComponent<VehiclePosition>().trackPoints);
         }
     }
 
@@ -23,23 +24,33 @@ public class Leaderboard : MonoBehaviour
     {
         if (Time.realtimeSinceStartup - lastUpdate > timeToUpdateLeaderboard)
         {
-            Debug.Log(leaderboard.Keys.ToString() + leaderboard.Values.ToString());
+            for (int i = 0; i < vehicles.Count; ++i)
+            {
+                Debug.Log(vehicles[i].name + " " + vehicleValues[vehicles[i]] + '\n');
+            }
+            Debug.Log(DotProductBetweenVehicles(vehicles[0], vehicles[1]).ToString());
 
             lastUpdate = Time.realtimeSinceStartup;
         }
+        Debug.Log("Count: " + vehicleValues.Count.ToString());
     }
 
-    private void OnGUI()
-    {
-        GUI.skin.label.fontSize = Screen.width / 50;
-        for(int i = 0; i < vehicles.Capacity; ++i)
-        {
+    //private void OnGUI()
+    //{
+    //    GUI.skin.label.fontSize = Screen.width / 50;
+    //    for(int i = 0; i < vehicles.Capacity; ++i)
+    //    {
             
-        }
+    //    }
+    //}
+
+    private float DotProductBetweenVehicles(GameObject front, GameObject back)
+    {
+        return Vector3.Dot(front.transform.forward, (front.transform.position - back.transform.position.normalized));
     }
 
     public string GetVehiclePosition(GameObject vehicle)
     {
-        return vehicle.name;
+        return vehicleValues[vehicle].ToString();
     }
 }
