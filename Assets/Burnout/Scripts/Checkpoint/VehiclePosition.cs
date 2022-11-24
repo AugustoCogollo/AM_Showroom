@@ -6,23 +6,24 @@ using TMPro;
 public class VehiclePosition : MonoBehaviour
 {
     [SerializeField] Leaderboard leaderboard;
-    TextMeshPro position;
-    public int trackPoints = 0;
+    private TextMeshPro textPosition;
     public List<GameObject> checkpoints;
+    public int trackPoints = 0;
+    public int racePosition;
 
     void Start()
     {
-        position = GetComponent<TextMeshPro>();
+        textPosition = GetComponent<TextMeshPro>();
     }
 
     void Update()
     {
-        
-        position.text = leaderboard.GetVehiclePosition(this.gameObject);
+        textPosition.text = racePosition.ToString();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Touched a checkpoint");
         if(other.transform.tag == "Checkpoint")
         {
             if (checkpoints.Contains(other.gameObject))
@@ -35,10 +36,19 @@ public class VehiclePosition : MonoBehaviour
                 checkpoints.Add(other.gameObject);
             }
         }
+        if (other.GetComponent<Checkpoint>().isLapStart)
+        {
+            CleanAfterNewLap();
+        }
     }
 
     public void CleanAfterNewLap()
     {
         checkpoints.Clear();
+    }
+
+    public void UpdatePosition(int newPosition)
+    {
+        racePosition = newPosition;
     }
 }

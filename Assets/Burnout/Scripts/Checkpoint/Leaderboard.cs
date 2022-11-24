@@ -6,18 +6,23 @@ using TMPro;
 public class Leaderboard : MonoBehaviour
 {
     public List<GameObject> vehicles = new List<GameObject>();
-    public Dictionary<GameObject, int> vehicleValues = new Dictionary<GameObject, int>();
-    public Dictionary<GameObject, int> leaderboard; //Sorted vehicleValues
+    public Dictionary<GameObject, int> vehicleToInt = new Dictionary<GameObject, int>();
+    public Dictionary<int, GameObject> intToVehicle = new Dictionary<int, GameObject>();
+    public List<int> leaderboard = new List<int>();
     float lastUpdate; 
-    float timeToUpdateLeaderboard = 2;
+    float timeToUpdateLeaderboard = 0.5f;
 
     void Start()
-    {
+    {   
         lastUpdate = Time.realtimeSinceStartup;
         for(int i = 0; i < vehicles.Count; ++i)
         {
-            vehicleValues.Add(vehicles[i], vehicles[i].GetComponent<VehiclePosition>().trackPoints);
+            vehicleToInt.Add(vehicles[i], vehicles[i].GetComponent<VehiclePosition>().trackPoints);
+            intToVehicle.Add(vehicles[i].GetComponent<VehiclePosition>().trackPoints, vehicles[i]);
+            leaderboard.Add(vehicleToInt[vehicles[i]]);
         }
+        leaderboard.Sort();
+        leaderboard.Reverse();
     }
 
     private void Update()
@@ -26,31 +31,47 @@ public class Leaderboard : MonoBehaviour
         {
             for (int i = 0; i < vehicles.Count; ++i)
             {
-                Debug.Log(vehicles[i].name + " " + vehicleValues[vehicles[i]] + '\n');
+                vehicleToInt[vehicles[i]] = vehicles[i].GetComponent<VehiclePosition>().trackPoints;
+                intToVehicle[vehicles[i].GetComponent<VehiclePosition>().trackPoints] = vehicles[i];
+                //Debug.Log(vehicleToInt[vehicles[i]] + ". " + vehicles[i].GetComponent<VehiclePosition>().racePosition.ToString() + '\n');
             }
-            Debug.Log(DotProductBetweenVehicles(vehicles[0], vehicles[1]).ToString());
-
+            UpdateLeaderboard();
             lastUpdate = Time.realtimeSinceStartup;
         }
-        Debug.Log("Count: " + vehicleValues.Count.ToString());
     }
 
-    //private void OnGUI()
-    //{
-    //    GUI.skin.label.fontSize = Screen.width / 50;
-    //    for(int i = 0; i < vehicles.Capacity; ++i)
-    //    {
-            
-    //    }
-    //}
-
-    private float DotProductBetweenVehicles(GameObject front, GameObject back)
+    private void OnGUI()
     {
-        return Vector3.Dot(front.transform.forward, (front.transform.position - back.transform.position.normalized));
+        GUI.skin.label.fontSize = Screen.width / 50;
+        string guiOutput;
+        for (int i = 0; i < vehicles.Capacity; ++i)
+        {
+            guiOutput = vehicles[i].GetComponent<VehiclePosition>().racePosition.ToString();
+        }
     }
 
-    public string GetVehiclePosition(GameObject vehicle)
+    private void UpdateLeaderboard()
     {
-        return vehicleValues[vehicle].ToString();
+        for(int i = 0; i < leaderboard.Count; ++i)
+        {
+            leaderboard[i] = GetVehiclePoints(vehicles[i]);
+        }
+        leaderboard.Sort();
+        leaderboard.Reverse();
+        for (int i = 0; i < leaderboard.Count; ++i)
+        {
+            vehicles[i].GetComponent<VehiclePosition>().racePosition = leaderboard.IndexOf(vehicleToInt[vehicles[i]]) + 1;
+
+        }
+    }
+
+    private int GetVehiclePoints(GameObject vehicle)
+    {
+        return vehicleToInt[vehicle];
+    }
+
+    private GameObject GetPointsFromVehicle(int trackPoints)
+    {
+        return intToVehicle[trackPoints];
     }
 }
