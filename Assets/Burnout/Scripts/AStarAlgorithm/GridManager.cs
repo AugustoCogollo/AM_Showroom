@@ -39,6 +39,7 @@ public class GridManager : MonoBehaviour
     private void Awake()
     {
         obstacleList = GameObject.FindGameObjectsWithTag("Obstacle");
+        Debug.Log(obstacleList.Length.ToString());
         CalculateObstacles();
     }
 
@@ -46,16 +47,19 @@ public class GridManager : MonoBehaviour
     {
         nodes = new Node[numOfColumns, numOfRows];
         int index = 0;
-        for (int i = 0; i < numOfColumns; ++i)
-            for (int j = 0; i < numOfRows; ++j)
+        for (int i = 0; i < numOfColumns; i++)
+        {
+            for (int j = 0; j < numOfRows; j++)
             {
                 Vector3 cellPos = GetGridCellCenter(index);
                 Node node = new Node(cellPos);
                 nodes[i, j] = node;
                 index++;
             }
+        }
         if (obstacleList != null && obstacleList.Length > 0)
         {
+            //For each obstacle found on the map, record it in our list
             foreach (GameObject data in obstacleList)
             {
                 int indexCell = GetGridIndex(data.transform.position);

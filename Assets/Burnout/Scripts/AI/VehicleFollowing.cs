@@ -18,7 +18,6 @@ public class VehicleFollowing : MonoBehaviour
 
     Vector3 velocity;
 
-    // Start is called before the first frame update
     void Start()
     {
         pathLength = path.GetLength();
@@ -48,8 +47,7 @@ public class VehicleFollowing : MonoBehaviour
 
         transform.rotation = Quaternion.LookRotation(velocity);
     }
-    public Vector3 Steer(Vector3 target,
-    bool bFinalPoint = false)
+    public Vector3 Steer(Vector3 target, bool bFinalPoint = false)
     {
         Vector3 desiredVelocity = (target - transform.position);
         float dist = desiredVelocity.magnitude;
