@@ -43,7 +43,7 @@ public class GridManager : MonoBehaviour
         CalculateObstacles();
     }
 
-    void CalculateObstacles()
+    public void CalculateObstacles()
     {
         nodes = new Node[numOfColumns, numOfRows];
         int index = 0;

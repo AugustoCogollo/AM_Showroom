@@ -18,12 +18,15 @@ public class FindPathInTrack : MonoBehaviour
     float pathLength;
 
     public float speed = 20.0f;
-    public float curSpeed;
+    public float curSpeed = 0.0f;
+    public float speedY;
     public float mass = 5.0f;
     Node curNode;
 
     private Vector3 targetPoint;
     Vector3 velocity;
+    public bool isLooping = true;
+
     void Start()
     {
         objStartCube = GameObject.FindGameObjectWithTag("Start");
@@ -43,6 +46,7 @@ public class FindPathInTrack : MonoBehaviour
         if (elapsedTime >= intervalTime)
         {
             elapsedTime = 0.0f;
+            GridManager.instance.CalculateObstacles();
             FindPath();
         }
 
@@ -50,19 +54,21 @@ public class FindPathInTrack : MonoBehaviour
         curNode = (Node)pathArray[curPathIndex];
         targetPoint = curNode.position;
 
-        if(Vector3.Distance(transform.position, targetPoint) < 2)
+        if (Vector3.Distance(transform.position, targetPoint) < 2)
         {
             if (curPathIndex < pathLength - 1) ++curPathIndex;
             else return;
         }
         if (curPathIndex >= pathLength) return;
-
-        if (curPathIndex >= pathLength - 1)
+        if (curPathIndex >= pathLength - 1 && isLooping) curPathIndex = 0;
+        if (curPathIndex >= pathLength - 1 && !isLooping)
             velocity += Steer(targetPoint, true);
         else velocity += Steer(targetPoint);
 
         transform.position += velocity;
         transform.rotation = Quaternion.LookRotation(velocity);
+
+        Debug.Log("Current index: " + curPathIndex.ToString());
     }
 
     public Vector3 Steer(Vector3 target, bool bFinalPoint = false)
