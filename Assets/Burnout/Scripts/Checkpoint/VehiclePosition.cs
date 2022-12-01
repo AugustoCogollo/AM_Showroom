@@ -8,7 +8,7 @@ public class VehiclePosition : MonoBehaviour
     [SerializeField] Leaderboard leaderboard;
     private TextMeshPro textPosition;
     public List<GameObject> checkpoints;
-    public int trackPoints = 0;
+    public float trackPoints = 0;
     public int racePosition;
 
     void Start()
@@ -23,7 +23,6 @@ public class VehiclePosition : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Touched a checkpoint");
         if(other.transform.tag == "Checkpoint")
         {
             if (checkpoints.Contains(other.gameObject))

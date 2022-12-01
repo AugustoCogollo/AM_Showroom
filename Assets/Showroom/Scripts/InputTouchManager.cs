@@ -7,13 +7,10 @@ public class InputTouchManager : MonoBehaviour
 {
     public float touchSensitivityX = 10.0f;
     public float touchSensitivityY = 10.0f;
-
-    CubeMover cubeMover;
     CinemachineFreeLook cinemachine;
 
     private void Start()
     {
-        cubeMover = GetComponent<CubeMover>();
         cinemachine = GetComponent<CinemachineFreeLook>();
         CinemachineCore.GetInputAxis = HandleAxisInputDelegate;
     }

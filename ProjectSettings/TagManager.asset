@@ -9,6 +9,7 @@ TagManager:
   - Obstacle
   - Start
   - End
+  - IA
   layers:
   - Default
   - TransparentFX

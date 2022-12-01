@@ -39,7 +39,6 @@ public class GridManager : MonoBehaviour
     private void Awake()
     {
         obstacleList = GameObject.FindGameObjectsWithTag("Obstacle");
-        Debug.Log(obstacleList.Length.ToString());
         CalculateObstacles();
     }
 

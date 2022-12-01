@@ -3,84 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 public class FindPathInTrack : MonoBehaviour
 {
+    public static FindPathInTrack s_Instance = null;
+
+    public static FindPathInTrack instance
+    {
+        get
+        {
+            if (s_Instance == null)
+            {
+                s_Instance = FindObjectOfType(typeof(FindPathInTrack)) as FindPathInTrack;
+                if (s_Instance == null)
+                {
+                    Debug.Log("Could not locate a FindPathInTrack object.\n You have to have exactly one GridManager in the scene");
+                }
+            }
+            return s_Instance;
+        }
+    }
+
     private Transform startPos, endPos;
     public Node startNode { get; set; }
     public Node goalNode { get; set; }
-    public ArrayList pathArray;
-    public List<Vector3> pathList;
-    GameObject objStartCube, objEndCube;
-    private float elapsedTime = 0.0f;
-    //Interval time between pathfinding
-    public float intervalTime = 1.0f;
-
+    public ArrayList pathArray = new ArrayList();
+    public GameObject[] vehiclesList;
+    public GameObject objStartCube, objEndCube;
+    
     //Follow Path
-    int curPathIndex = 0;
-    float pathLength;
-
-    public float speed = 20.0f;
-    public float curSpeed = 0.0f;
-    public float speedY;
+    public float pathLength;
     public float mass = 5.0f;
-    Node curNode;
-
-    private Vector3 targetPoint;
-    Vector3 velocity;
-    public bool isLooping = true;
 
     void Start()
     {
         objStartCube = GameObject.FindGameObjectWithTag("Start");
         objEndCube = GameObject.FindGameObjectWithTag("End");
-        pathArray = new ArrayList();
         FindPath();
-
-        transform.position = objStartCube.transform.position;
-
-        curPathIndex = 0;
         pathLength = pathArray.Count;
-        velocity = transform.forward;
-    }
-    void Update()
-    {
-        elapsedTime += Time.deltaTime;
-        if (elapsedTime >= intervalTime)
+        vehiclesList = GameObject.FindGameObjectsWithTag("IA");
+        foreach(GameObject vehicle in vehiclesList)
         {
-            speed = Random.Range(10.0f, 20.0f);
-            elapsedTime = 0;
+            vehicle.GetComponent<FollowAStar>().enabled = !vehicle.GetComponent<FollowAStar>().enabled;
         }
-
-        curSpeed = speed * Time.deltaTime;
-        curNode = (Node)pathArray[curPathIndex];
-        targetPoint = curNode.position;
-
-        if (Vector3.Distance(transform.position, targetPoint) < 2)
-        {
-            if (curPathIndex < pathLength - 1) ++curPathIndex;
-            else return;
-        }
-        if (curPathIndex >= pathLength && isLooping) curPathIndex = 0;
-        if (curPathIndex >= pathLength - 1 && !isLooping)
-            velocity += Steer(targetPoint, true);
-        else velocity += Steer(targetPoint);
-
-        transform.position += velocity;
-        transform.rotation = Quaternion.LookRotation(velocity);
-    }
-
-    public Vector3 Steer(Vector3 target, bool bFinalPoint = false)
-    {
-        Vector3 desiredVelocity = (target - transform.position);
-        float dist = desiredVelocity.magnitude;
-
-        desiredVelocity.Normalize();
-
-        if (bFinalPoint && dist < 10.0f) desiredVelocity *=
-            (curSpeed * (dist / 10.0f));
-        else desiredVelocity *= curSpeed;
-
-        Vector3 steeringForce = desiredVelocity - velocity;
-        Vector3 acceleration = steeringForce / mass;
-        return acceleration;
     }
 
     void FindPath()

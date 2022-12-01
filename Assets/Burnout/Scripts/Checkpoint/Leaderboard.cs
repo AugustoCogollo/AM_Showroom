@@ -6,9 +6,9 @@ using TMPro;
 public class Leaderboard : MonoBehaviour
 {
     public List<GameObject> vehicles = new List<GameObject>();
-    public Dictionary<GameObject, int> vehicleToInt = new Dictionary<GameObject, int>();
-    public Dictionary<int, GameObject> intToVehicle = new Dictionary<int, GameObject>();
-    public List<int> leaderboard = new List<int>();
+    public Dictionary<GameObject, float> vehicleToInt = new Dictionary<GameObject, float>();
+    public Dictionary<float, GameObject> intToVehicle = new Dictionary<float, GameObject>();
+    public List<float> leaderboard = new List<float>();
     float lastUpdate; 
     float timeToUpdateLeaderboard = 0.5f;
 
@@ -65,7 +65,7 @@ public class Leaderboard : MonoBehaviour
         }
     }
 
-    private int GetVehiclePoints(GameObject vehicle)
+    private float GetVehiclePoints(GameObject vehicle)
     {
         return vehicleToInt[vehicle];
     }
