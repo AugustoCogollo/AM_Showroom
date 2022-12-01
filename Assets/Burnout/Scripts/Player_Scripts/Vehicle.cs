@@ -55,8 +55,17 @@ public class Vehicle : MonoBehaviour
 
     void Update()
     {
+        if(canMove == false)
+            elapsedTime += Time.deltaTime;
+        if (elapsedTime >= 9)
+        {
+            canMove = true;
+        }
 
-        accelerometerInput = Input.acceleration;
+        if (canMove)
+            accelerometerInput = Input.acceleration;
+        else
+            accelerometerInput = Vector3.zero;
         accelerometerInput.Normalize();
 
         kmPerHour = Mathf.Round(rbVehicle.velocity.magnitude * 3.6f);
