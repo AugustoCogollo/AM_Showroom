@@ -42,7 +42,8 @@ public class Vehicle : MonoBehaviour
 
     [Header("Position values")]
     [SerializeField] int positionValue;
-    public float elapsedTime = 0; 
+    public float elapsedTime = 0;
+    public Laptracker laptracker;
 
     [Header("UI Values")]
     public TMP_Text velocityTxt;
@@ -54,16 +55,8 @@ public class Vehicle : MonoBehaviour
 
     void Update()
     {
-        if(!canMove)
-            elapsedTime += Time.deltaTime;
-        if (elapsedTime >= 10)
-        {
-            canMove = true;
-        }
-        if (canMove)
-            accelerometerInput = Input.acceleration;
-        else
-            accelerometerInput = Vector3.zero;
+
+        accelerometerInput = Input.acceleration;
         accelerometerInput.Normalize();
 
         kmPerHour = Mathf.Round(rbVehicle.velocity.magnitude * 3.6f);
@@ -130,6 +123,11 @@ public class Vehicle : MonoBehaviour
         if(other.gameObject.tag == "Checkpoint")
         {
             ++positionValue;
+        }
+        if(other.gameObject.CompareTag("Ground"))
+        {
+            transform.position = laptracker.lastSeenCheckpoint.gameObject.transform.position;
+            motorForceToApply = 0;
         }
     }
 }

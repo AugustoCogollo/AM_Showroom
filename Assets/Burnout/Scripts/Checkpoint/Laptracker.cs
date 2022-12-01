@@ -23,7 +23,7 @@ public class Laptracker : MonoBehaviour
     public TMP_Text totalTimeTxt;
     public TMP_Text bestLapTxt;
 
-    Checkpoint lastSeenCheckpoint;
+    public Checkpoint lastSeenCheckpoint;
     Checkpoint[] allCheckpoints;
     Checkpoint StartCheckpoint { 
         get
@@ -109,6 +109,8 @@ public class Laptracker : MonoBehaviour
         {
             wrongWayIndicator.SetActive(true);
         }
+
+        
     }
 
     Checkpoint NearestCheckpoint()
@@ -179,7 +181,7 @@ public class Laptracker : MonoBehaviour
                 if (vehicle.gameObject.tag == "IA")
                     vehicle.GetComponent<FollowAStar>().canMove = false;
                 else
-                    vehicle.GetComponent<Vehicle>
+                    vehicle.GetComponent<Vehicle>().canMove = false;
             }
         }
     }

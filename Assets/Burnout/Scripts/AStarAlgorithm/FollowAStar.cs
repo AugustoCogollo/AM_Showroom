@@ -39,7 +39,7 @@ public class FollowAStar : MonoBehaviour
         elapsedTime += Time.deltaTime;
         if (elapsedTime >= intervalTime)
         {
-            speed = Random.Range(10.0f, 20.0f);
+            speed = Random.Range(15.0f, 30.0f);
             elapsedTime = 0;
             Debug.Log(curPathIndex);
         }
