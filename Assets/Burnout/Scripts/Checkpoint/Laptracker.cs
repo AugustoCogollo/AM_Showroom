@@ -32,6 +32,8 @@ public class Laptracker : MonoBehaviour
         }
     }
 
+    Leaderboard leaderboard;
+
     void Start()
     {
         UpdateLapCounter();
@@ -45,6 +47,8 @@ public class Laptracker : MonoBehaviour
         lastSeenCheckpoint = StartCheckpoint;
 
         bestLapTime = 0;
+
+        leaderboard = GameObject.FindObjectOfType<Leaderboard>();
     }
 
     private void Update()
@@ -157,7 +161,7 @@ public class Laptracker : MonoBehaviour
 
     void UpdateLapCounter()
     {
-        lapCounter.text = string.Format("Lap {0}", lapsComplete + 1);
+        lapCounter.text = string.Format("Lap {0}/3", lapsComplete + 1);
     }
 
     private void OnDrawGizmos()
@@ -167,6 +171,16 @@ public class Laptracker : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(target.position, nearest.transform.position);
+        }
+        if(lapsComplete == 3)
+        {
+            foreach(GameObject vehicle in leaderboard.vehicles)
+            {
+                if (vehicle.gameObject.tag == "IA")
+                    vehicle.GetComponent<FollowAStar>().canMove = false;
+                else
+                    vehicle.GetComponent<Vehicle>
+            }
         }
     }
 }

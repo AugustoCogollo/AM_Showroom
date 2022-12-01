@@ -18,6 +18,7 @@ public class FollowAStar : MonoBehaviour
     private Vector3 velocity;
     private ArrayList path = new ArrayList();
     public bool isLooping = true;
+    public bool canMove = false;
 
     //Time
     float elapsedTime = 0.0f;
@@ -30,6 +31,7 @@ public class FollowAStar : MonoBehaviour
         velocity = transform.forward;
         pathLength = path.Count;
         speed = 0;
+        canMove = true;
     }
 
     void Update()
@@ -42,22 +44,25 @@ public class FollowAStar : MonoBehaviour
             Debug.Log(curPathIndex);
         }
 
-        curSpeed = speed * Time.deltaTime;
-        curNode = (Node)path[curPathIndex];
-        targetPoint = curNode.position;
-
-        if (Vector3.Distance(transform.position, targetPoint) < 1)
+        if (canMove)
         {
-            if (curPathIndex < pathLength - 1) ++curPathIndex;
-            else return;
-        }
-        if (curPathIndex >= pathLength && isLooping) curPathIndex = 0;
-        if (curPathIndex >= pathLength && !isLooping)
-            velocity += Steer(targetPoint, true);
-        else velocity += Steer(targetPoint);
+            curSpeed = speed * Time.deltaTime;
+            curNode = (Node)path[curPathIndex];
+            targetPoint = curNode.position;
 
-        transform.position += velocity;
-        transform.rotation = Quaternion.LookRotation(velocity);
+            if (Vector3.Distance(transform.position, targetPoint) < 1)
+            {
+                if (curPathIndex < pathLength - 1) ++curPathIndex;
+                else return;
+            }
+            if (curPathIndex >= pathLength && isLooping) curPathIndex = 0;
+            if (curPathIndex >= pathLength && !isLooping)
+                velocity += Steer(targetPoint, true);
+            else velocity += Steer(targetPoint);
+
+            transform.position += velocity;
+            transform.rotation = Quaternion.LookRotation(velocity);
+        }
     }
 
     public Vector3 Steer(Vector3 target, bool bFinalPoint = false)

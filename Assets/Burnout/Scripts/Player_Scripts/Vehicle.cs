@@ -38,9 +38,11 @@ public class Vehicle : MonoBehaviour
     public float timeForMaxAcceleration = 10f;
     public float currentTime;
     public float kmPerHour;
+    public bool canMove = false;
 
     [Header("Position values")]
     [SerializeField] int positionValue;
+    public float elapsedTime = 0; 
 
     [Header("UI Values")]
     public TMP_Text velocityTxt;
@@ -52,7 +54,16 @@ public class Vehicle : MonoBehaviour
 
     void Update()
     {
-        accelerometerInput = Input.acceleration;
+        if(!canMove)
+            elapsedTime += Time.deltaTime;
+        if (elapsedTime >= 10)
+        {
+            canMove = true;
+        }
+        if (canMove)
+            accelerometerInput = Input.acceleration;
+        else
+            accelerometerInput = Vector3.zero;
         accelerometerInput.Normalize();
 
         kmPerHour = Mathf.Round(rbVehicle.velocity.magnitude * 3.6f);
