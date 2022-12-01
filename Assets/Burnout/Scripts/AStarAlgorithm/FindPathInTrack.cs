@@ -14,7 +14,7 @@ public class FindPathInTrack : MonoBehaviour
     public float intervalTime = 1.0f;
 
     //Follow Path
-    int curPathIndex;
+    int curPathIndex = 0;
     float pathLength;
 
     public float speed = 20.0f;
@@ -45,9 +45,8 @@ public class FindPathInTrack : MonoBehaviour
         elapsedTime += Time.deltaTime;
         if (elapsedTime >= intervalTime)
         {
-            elapsedTime = 0.0f;
-            GridManager.instance.CalculateObstacles();
-            FindPath();
+            speed = Random.Range(10.0f, 20.0f);
+            elapsedTime = 0;
         }
 
         curSpeed = speed * Time.deltaTime;
@@ -59,16 +58,13 @@ public class FindPathInTrack : MonoBehaviour
             if (curPathIndex < pathLength - 1) ++curPathIndex;
             else return;
         }
-        if (curPathIndex >= pathLength) return;
-        if (curPathIndex >= pathLength - 1 && isLooping) curPathIndex = 0;
+        if (curPathIndex >= pathLength && isLooping) curPathIndex = 0;
         if (curPathIndex >= pathLength - 1 && !isLooping)
             velocity += Steer(targetPoint, true);
         else velocity += Steer(targetPoint);
 
         transform.position += velocity;
         transform.rotation = Quaternion.LookRotation(velocity);
-
-        Debug.Log("Current index: " + curPathIndex.ToString());
     }
 
     public Vector3 Steer(Vector3 target, bool bFinalPoint = false)
